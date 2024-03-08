@@ -1,24 +1,309 @@
-# Compiled class file
-*.class
+<?php
+session_start();
+$sql = "SELECT * FROM  room limit 3";
+$conn = require_once ("config/dbaccess.php");
+$result = $conn->query($sql);
 
-# Log file
-*.log
+$first_room_sql = "SELECT * FROM  room limit 1";
+$first_room_result = $conn->query($first_room_sql);
+$first_room_row = $first_room_result->fetch_assoc();
 
-# BlueJ files
-*.ctxt
+$news_sql = "SELECT * FROM  news limit 3";
+$news_result = $conn->query($news_sql);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hotel & Index HTML</title>
+<!-- Stylesheets -->
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<link href="assets/css/cus.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet">
+<!-- Responsive File -->
+<link href="assets/css/responsive.css" rel="stylesheet">
+<!-- Color File -->
+<link href="assets/css/color.css" rel="stylesheet">
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+<link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+<link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+<!-- Responsive -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+</head>
+
+<body class="gray_bg">
+
+<div class="page-wrapper">
+
+   <?php include 'inc/header.php'; ?>
+    <!-- End Main Header -->
+
+    <!-- Bnner Section -->
+    <section class="banner-section ">
+        <div class="swiper-container banner-slider">
+            <div class="swiper-wrapper">
+                <!-- Slide Item -->
+                <div class="swiper-slide" style="background-color:#E7E8EA">
+                    <div class="content-outer">
+                        <div class="content-box text-center justify-content-center">
+                            <div class="">
+                                 <div class="row " style="margin-top:5%" >
+                                    <div class="col-sm-8">
+                                           <h1 class="main-slider-title" style="font-size:64px">FIND MOST SUITABLE ROOM IN OUR HOTEL</h1>
+                                            <div class="main-slider-text">The quality of you sleeping is our mission</div>
+                                            <div class="link-box">
+                                                <!--<a href="#" class="btn-one s-three">EXPLORE<span></span></a>-->
+                                                <a href="room.php?room_id=<?=$first_room_row['id']?>" class="btn-one">Book Now +<span></span></a>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="row" style="margin-top:5%">
+                                           <div class="room-one-image ">
+                                                <img style="transform: scale(1.2)" src="assets/images/resource/room-cus-3.png" class="rounded" alt="">
+                                           </div>
+                                        </div>
+                                       
+                                    </div>
+                                  </div>
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!--<div class="banner-slider-nav style-one">-->
+        <!--    <div class="banner-slider-control banner-slider-button-prev"><span><i class="fal fa-angle-right"></i></span></div>-->
+        <!--    <div class="banner-slider-control banner-slider-button-next"><span><i class="fal fa-angle-right"></i></span> </div>-->
+        <!--</div>-->
+    </section>
+    <!-- End Bnner Section -->
+    
+    <!-- Room Section -->
+    <section class="room-one-section" id="Room">
+        <div class="auto-container">
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <div class="title-box">
+                        <div class="sub-title">The rooms shown below is our recommendations for you</div>
+                        <h2 class="sec-title">Rooms Recommended</h2>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <!--Filter-->
+                    <div class="filters cus-none">
+                        <ul class="filter-tabs filter-btns">
+                            <li class="filter active" data-role="button" data-filter=".all">All</li>
+                            <li class="filter" data-role="button" data-filter=".cat-1">Luxury</li>
+                            <li class="filter" data-role="button" data-filter=".cat-2">Family</li>
+                            <li class="filter" data-role="button" data-filter=".cat-3">Double Bed</li>
+                            <li class="filter" data-role="button" data-filter=".cat-4">Relax</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sortable-masonry">                
+                <div class="items-container row">
+                    <?php while($row = $result->fetch_assoc()){ ?>
+                        <div class="masonry-item all cat-1 col-lg-4 col-md-6">
+                            <div class="room-one-block">
+                                <div class="room-one-like"><i class="far fa-heart"></i></div>
+                                <div class="room-one-image ">
+                                    <img src="<?=$row['img']?>" alt="">
+                                </div>
+                                <div class="room-one-content">
+                                    <div class="room-one-info">Starting From <span>EUR <?=$row['price']?></span> /Night</div>
+                                    <h4 class="room-one-title"><a href="#"><?=$row['name']?></a></h4>
+                                    <?php
+                                    $inclues_str = "Includes";
+                                    if($row['is_breakfast_included'] == 1){
+                                        if ($inclues_str != "Includes") {
+                                            $inclues_str.=" and ";
+                                        }
+                                        $inclues_str.= " breakfast";
+                                    }
+                                    if($row['is_pet'] == 1){
+                                        if ($inclues_str != "Includes") {
+                                            $inclues_str.=" and ";
+                                        }
+                                        $inclues_str.= "pat";
+                                    }
+                                    if($row['is_car_parking'] == 1){
+                                        if ($inclues_str != "Includes") {
+                                            $inclues_str.=" and ";
+                                        }
+                                        $inclues_str.= "parking";
+                                    }
+                                    ?>
+                                    <p><?=$inclues_str?> </p>
+
+                                    <div class="room-one-link-btn"><a href="room.php?room_id=<?=$row['id']?>" class="btn-one s-four">Book Now + <span></span></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                  
+                   
+                 
+                   
+                </div>
+                <!--<div class="room-one-view-all-btn text-center"><a href="#" class="btn-one btn_lg">View All Luxury + <span></span></a></div>-->
+            </div>
+        </div>
+    </section>
+    
+     
+
+  
+
+  
+ 
+      <!-- Contact Form section -->
+    <section class="contact-form-section" id="Imprint">
+       <div class="auto-container">
+            <h3 class="contact-form-one-title">Imprint</h3>
+            <div class="contact-form-one-desc">How to contact us</div>  
+            <div class="row">
+                  <div class="col-lg-4">
+                    <div class="contact-author-one">
+                        <div class="contact-author-thumb"><img src="assets/images/avatar.png" alt=""></div>
+                        <div class="contact-author-name">Yuxin Wang</div>
+                        <div class="contact-author-desc">Hotel Manager</div>
+                        <div class="contact-author-desc">Wang@gmail.com</div>
+                    </div>
+                </div>
+                  <div class="col-lg-4">
+                    <div class="contact-author-one">
+                        <div class="contact-author-thumb"><img src="assets/images/avatar2.png" alt=""></div>
+                        <div class="contact-author-name">Yuyin Lu</div>
+                         <div class="contact-author-desc">Hotel Manager</div>
+                        <div class="contact-author-desc">Lu@gmail.com</div>
+                       
+                    </div>
+                </div>
+            </div>
+       </div>
+    </section>
+    
+    
+     <!-- news section -->
+    <div class="blog-page" id="News">
+        <div class="auto-container">
+            <h3 class="contact-form-one-title">News</h3>
+            <div class="row">
+                <?php while($row = $news_result->fetch_assoc()){ ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-one-block">
+                        <div class="news-one-image"><div class=""><a href="./news_detail.php?id=<?=$row['id']?>"><?=$row['title']?><img src="<?=$row['img']?>" alt=""></a></div></div>
+                        <div class="news-one-content-bottom">
+                            <h4 class="news-one-title"><a href="./news_detail.php?id=<?=$row['id']?>"><?=$row['title']?></a></h4>
+                            <!--<div class="read-more">-->
+                            <!--    <a href="blog-details.html" class="reader-more-link">Read More +</a>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+              <?php }?>
+            </div>
+            <!--用于网页分页 Für die Seitenumbruch auf der Webseite-->
+            <!--<div class="post-pagination">-->
+            <!--    <ul class="clearfix">-->
+            <!--        <li><a href="#"><span class="fas fa-angle-left"></span></a></li>-->
+            <!--        <li><a href="#">1</a></li>-->
+            <!--        <li class="active"><a href="#">2</a></li>-->
+            <!--        <li><a href="#">3</a></li>-->
+            <!--        <li><a href="#"><span class="fas fa-angle-right"></span></a></li>-->
+            <!--    </ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+   <!-- about section -->
+    <section class="about-one-section" id="Help">
+        <div class="auto-container">
+               <h3 class="contact-form-one-title">Help</h3>
+            <div class="contact-form-one-desc">FAQs</div>  
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Where is our hotel?
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                   Dresdner Straße,Vienna,Austria
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                   How to Login
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                   Please go to the Login page,if you don't have an account,you can register first!
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    How to book our hotel
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    You first choose your favorite room type,then choose the date,and finally fill in the information to book!
+                  </div>
+                </div>
+              </div>
+              
+               <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Do I have to log in or register to make a reservation?
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    Yes!
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+        </div>
+    </section>
+
+   
+</div>
+<!--End pagewrapper-->
+ <?php include 'inc/footer.php'; ?>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
